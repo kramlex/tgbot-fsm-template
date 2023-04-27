@@ -2,6 +2,8 @@
 
 This is a template for creating a 1-2-1 bot with states using Kotlin and Gradle.
 
+![in_action](files/in_action.gif)
+
 ## Getting Started
 
 To get started, you will need to clone this repository.
