@@ -24,10 +24,8 @@ fun weekBetween(dateOfBirth: LocalDate): Int {
     val currentDate = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
-    val weeks = ((currentDate - dateOfBirth).days / 7)
-
     if (dateOfBirth >= currentDate) throw IllegalDateException("date of birth cannot be later than the current day")
-    return weeks
+    return dateOfBirth.daysUntil(currentDate) / 7
 }
 
 fun calculateWeeksFromJson(
@@ -40,6 +38,7 @@ fun calculateWeeksFromJson(
                     ?.jsonPrimitive?.contentOrNull
                     ?.toLocalDate()
                     ?: throw IllegalDateException("incorrect date in json")
+                println(date)
                 val weekCount = weekBetween(date)
                 + "you lived " + bold("$weekCount") + " weeks"
             } catch (error: IllegalDateException) {
