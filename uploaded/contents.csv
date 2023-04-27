@@ -1,0 +1,21 @@
+// Welcome,
+HelloMessage.message,"Hello, thank you for using this bot."
+// MainMenu,
+MainMenu.sayJoke,Say joke
+MainMenu.weekBetween,Calculate weeks between date of birth and current date
+MainMenu.sendLorem,Send Lorem file
+MainMenu.errorText,Select a valid item from the menu
+MainMenu.enterText,Select an item from the menu
+,
+// SayJoke,
+SayJoke.joke,Why did the tomato turn red? Because it saw the salad dressing!
+,
+// Lorem,
+Lorem.message,Send Lorem Ispum file
+// Birthaday,
+Birthdate.enterText,Enter your date of birth or select an item from the menu:
+Birthdate.warningText,"The date must be entered in the format dd.mm.yyyy, dd-mm-yyyy, well, or dd/mm/yyyy"
+,
+// Common,
+Common.invalidDataFormat,Invalid date format
+Common.back,Route back

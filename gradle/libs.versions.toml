@@ -1,0 +1,50 @@
+[versions]
+
+kotlinVersion = "1.7.22"
+
+tgBotApiVersion = "5.2.1"
+
+# kotlinx
+kotlinxSerializationVersion = "1.4.1"
+kotlinxDatetimeVersion = "0.3.3"
+coroutinesVersion = "1.6.4"
+sqlDelightVersion = "2.0.0-alpha02"
+
+# ktor
+ktorClientVersion = "2.0.3"
+
+# csv
+kotlinCsvVersion = "1.4.0"
+
+#log
+slf4jVersion = "2.0.6"
+
+[libraries]
+
+#telegram
+tgBotApi = { module = "dev.inmo:tgbotapi", version.ref = "tgBotApiVersion" }
+
+sqlDelightGradle = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqlDelightVersion" }
+sqlDelightCoroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelightVersion" }
+sqlDelightDriver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelightVersion" }
+
+kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationVersion" }
+kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetimeVersion" }
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
+
+kotlinJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlinVersion" }
+
+ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientVersion" }
+ktorClientCio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClientVersion" }
+
+kotlinCsv = { module = "com.github.doyaaaaaken:kotlin-csv-jvm", version.ref = "kotlinCsvVersion" }
+
+# gradle
+kotlinSerializationGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlinVersion" }
+kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinVersion" }
+
+#ktsRunner
+
+
+slf4j = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jVersion" }
+

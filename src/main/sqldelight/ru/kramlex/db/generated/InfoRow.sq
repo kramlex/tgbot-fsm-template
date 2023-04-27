@@ -1,0 +1,40 @@
+import dev.inmo.tgbotapi.types.IdChatIdentifier;
+import kotlinx.serialization.json.JsonObject;
+
+CREATE TABLE AllInfoRow(
+    id INTEGER NOT NULL PRIMARY KEY,
+    userId INTEGER AS IdChatIdentifier NOT NULL,
+    type TEXT NOT NULL,
+    value TEXT AS JsonObject NOT NULL
+);
+
+insert:
+INSERT INTO AllInfoRow (userId, type, value)
+VALUES(:userId, :type, :value);
+
+updateState:
+UPDATE AllInfoRow
+SET value = :newValue
+WHERE id = :id;
+
+getAllInfoFromType:
+SELECT *
+FROM AllInfoRow
+WHERE type = :type;
+
+getAllInfoFromUserId:
+SELECT *
+FROM AllInfoRow
+WHERE userId = :userId;
+
+getAllInfo:
+SELECT *
+FROM AllInfoRow
+WHERE userId = :userId AND type = :type;
+
+deleteInfo:
+DELETE FROM AllInfoRow
+WHERE id IN :ids;
+
+dropTable:
+DELETE FROM AllInfoRow;

@@ -1,0 +1,4 @@
+// Files,,
+url.lorem,Lorem.md,https://raw.githubusercontent.com/kramlex/tgbot-fsm-template/main/files/Lorem.md
+// Scripts,,
+url.calculateWeeks,calculateWeeksScript.kts,https://raw.githubusercontent.com/kramlex/tgbot-fsm-template/main/files/calculateWeeksScript.kts
