@@ -1,0 +1,9 @@
+.idea
+*.iml
+.gradle
+/build/
+!gradle-wrapper.jar
+*/build/*
+/local.properties
+/*.hprof
+.DS_Store
