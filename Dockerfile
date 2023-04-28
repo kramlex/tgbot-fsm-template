@@ -13,7 +13,7 @@ RUN tar -xf build/distributions/tgbot-fsm-1.tar
 
 FROM openjdk:17-jdk-slim
 
-COPY --from=build /app/kotlin-acept-bot-1 /app
+COPY --from=build /app/tgbot-fsm-1 /app
 
 WORKDIR /app
 
