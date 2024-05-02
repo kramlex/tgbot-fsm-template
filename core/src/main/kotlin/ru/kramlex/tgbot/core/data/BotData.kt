@@ -12,6 +12,7 @@ import ru.kramlex.tgbot.core.actions.CustomActions
 data class BotData(
     val startState: String,
     val defaultState: String,
+    val callbacks: List<CallbackData>,
     val states: List<JsonElement>,
     val commands: List<Command>
 )

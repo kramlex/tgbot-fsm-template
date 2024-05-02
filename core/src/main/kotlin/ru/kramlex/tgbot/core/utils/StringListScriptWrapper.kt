@@ -2,11 +2,11 @@
  * Copyright (c) 2022 Mark Dubkov. All rights reserved.
  */
 
-package ru.kramlex.tgbot.bot.utils
+package ru.kramlex.tgbot.core.utils
 
 import dev.inmo.tgbotapi.types.message.textsources.TextSourcesList
 import kotlinx.serialization.json.JsonObject
 
-data class StringListScriptWrapper(
-    val calculation: (JsonObject) -> List<TextSourcesList>,
-)
+fun interface StringListScriptWrapper {
+    fun calculate(jsonObject: JsonObject): List<TextSourcesList>
+}

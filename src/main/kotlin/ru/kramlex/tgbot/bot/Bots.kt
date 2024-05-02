@@ -7,8 +7,12 @@ package ru.kramlex.tgbot.bot
 import app.cash.sqldelight.db.SqlDriver
 import dev.inmo.tgbotapi.bot.ktor.telegramBot
 import dev.inmo.tgbotapi.extensions.api.bot.getMe
+import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
 import dev.inmo.tgbotapi.extensions.behaviour_builder.buildBehaviourWithLongPolling
+import dev.inmo.tgbotapi.extensions.utils.extensions.raw.message
+import dev.inmo.tgbotapi.types.BotCommand
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.joinAll
@@ -25,6 +29,7 @@ import ru.kramlex.tgbot.bot.model.RepositoryWrapper
 import ru.kramlex.tgbot.bot.repositories.InfoRepository
 import ru.kramlex.tgbot.bot.repositories.UserRepository
 import ru.kramlex.db.generated.BotDatabase
+import ru.kramlex.tgbot.bot.handlers.handleCallback
 
 internal class Bots {
 
@@ -35,11 +40,7 @@ internal class Bots {
     // Database
     private val adapterFactory by lazy { AdapterFactory(json) }
     private val botDao by lazy {
-        val driver: SqlDriver =
-            JvmSqliteDriver(
-                schema = BotDatabase.Schema,
-                path = Constants.DATABASE_NAME
-            )
+        val driver: SqlDriver = JvmSqliteDriver(BotDatabase.Schema, Constants.DATABASE_NAME)
         val database = with(adapterFactory) { BotDatabase(driver, allInfoRowAdapter, userAdapter) }
         BotDao(database)
     }
@@ -73,8 +74,16 @@ internal class Bots {
                 repositoryWrapper = repositoryWrapper,
                 botManager = botManager
             )
+
             handleTextWithoutCommands(botManager)
 
+            botManager.botCommands
+                .onEach { setMyCommands(it) }
+                .launchIn(scope)
+
+            callbackQueriesFlow
+                .onEach { handleCallback(it, botManager, repositoryWrapper) }
+                .launchIn(scope)
         }
 
         listOf(firstBot /* other bots*/).joinAll()

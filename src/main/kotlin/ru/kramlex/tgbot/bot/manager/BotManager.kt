@@ -4,24 +4,27 @@
 
 package ru.kramlex.tgbot.bot.manager
 
+import dev.inmo.tgbotapi.types.BotCommand
 import dev.inmo.tgbotapi.types.IdChatIdentifier
 import dev.inmo.tgbotapi.types.message.textsources.TextSourcesList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import org.jetbrains.kotlin.psi.Call
 import ru.kramlex.tgbot.bot.data.ApplicationData
 import ru.kramlex.tgbot.bot.kts.KtsObjectLoader
 import ru.kramlex.tgbot.bot.model.RepositoryWrapper
-import ru.kramlex.tgbot.bot.utils.StringListScriptWrapper
-import ru.kramlex.tgbot.core.actions.CustomActions
 import ru.kramlex.tgbot.core.data.BotData
+import ru.kramlex.tgbot.core.data.CallbackData
 import ru.kramlex.tgbot.core.data.Command
 import ru.kramlex.tgbot.core.json.jsonForParsing
 import ru.kramlex.tgbot.core.other.ValueType
@@ -31,6 +34,7 @@ import ru.kramlex.tgbot.core.states.MenuState
 import ru.kramlex.tgbot.core.states.State
 import ru.kramlex.tgbot.core.states.StateInfo
 import ru.kramlex.tgbot.core.states.StateType
+import ru.kramlex.tgbot.core.utils.StringListScriptWrapper
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -41,6 +45,8 @@ class BotManager(
 
     private val scope = CoroutineScope(Dispatchers.Default)
 
+    private val _callbacks: MutableStateFlow<List<CallbackData>> =
+        MutableStateFlow(emptyList())
     private val _states: MutableStateFlow<Set<State>> =
         MutableStateFlow(emptySet())
     private val _commands: MutableStateFlow<List<Command>> =
@@ -51,8 +57,13 @@ class BotManager(
 
     private val ktsRunner: KtsObjectLoader by lazy { KtsObjectLoader() }
 
+    val callbacks: StateFlow<List<CallbackData>> = _callbacks.asStateFlow()
     val states: StateFlow<Set<State>> = _states.asStateFlow()
     val commands: StateFlow<List<Command>> = _commands.asStateFlow()
+
+    val botCommands: Flow<List<BotCommand>> get() =
+        commands.map { list -> list.map { BotCommand(it.command, it.description) } }
+
     val startState: State?
         get() = _startState
     val defaultState: State?
@@ -70,6 +81,9 @@ class BotManager(
 
     fun getStateInfo(stateName: String): State? =
         states.value.find { it.name == stateName }
+
+    fun getCallback(data: String): CallbackData? =
+        callbacks.value.find { it.data == data }
 
     fun getStateInfo(userId: IdChatIdentifier): State? =
         repositoryWrapper.userRepository.getUser(userId).let { user ->
@@ -129,6 +143,7 @@ class BotManager(
             _defaultState = newDefaultState
 
             _states.update { newStates }
+            _callbacks.update { botData.callbacks }
             _commands.update { botData.commands }
         } catch (error: Throwable) {
             println(error)
@@ -182,7 +197,7 @@ class BotManager(
             Files.newBufferedReader(Paths.get(scriptPath))
         }
         val scriptWrapper: StringListScriptWrapper = ktsRunner.load(scriptReader)
-        return scriptWrapper.calculation(jsonInfo)
+        return scriptWrapper.calculate(jsonInfo)
     }
 
     private companion object {

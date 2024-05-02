@@ -12,7 +12,7 @@ import kotlinx.datetime.*
 import kotlinx.serialization.json.*
 import dev.inmo.tgbotapi.extensions.utils.formatting.*
 import dev.inmo.tgbotapi.types.message.textsources.*
-import ru.kramlex.tgbot.bot.utils.StringListScriptWrapper
+import ru.kramlex.tgbot.core.utils.StringListScriptWrapper
 import kotlin.jvm.Throws
 
 /** EDIT ZONE */
@@ -50,6 +50,6 @@ fun calculateWeeksFromJson(
 
 /** END EDIT ZONE */
 
-StringListScriptWrapper(
-    calculation = ::calculateWeeksFromJson
-)
+StringListScriptWrapper {
+    calculateWeeksFromJson(it)
+}

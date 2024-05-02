@@ -4,17 +4,15 @@
 
 package ru.kramlex.tgbot.bot.handlers
 
-import dev.inmo.tgbotapi.extensions.api.bot.setMyCommands
 import dev.inmo.tgbotapi.extensions.behaviour_builder.BehaviourContext
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onText
-import dev.inmo.tgbotapi.types.BotCommand
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import ru.kramlex.tgbot.bot.data.ApplicationData
 import ru.kramlex.tgbot.bot.manager.BotManager
-import ru.kramlex.tgbot.bot.utils.chatId
-import ru.kramlex.tgbot.bot.utils.isCommand
-import ru.kramlex.tgbot.bot.utils.text
+import ru.kramlex.tgbot.core.utils.chatId
+import ru.kramlex.tgbot.core.utils.isCommand
+import ru.kramlex.tgbot.core.utils.text
 import ru.kramlex.tgbot.core.actions.MessageAction
 import ru.kramlex.tgbot.core.actions.executeActionWithMessage
 import ru.kramlex.tgbot.core.actions.startActionsQueue
@@ -25,10 +23,6 @@ suspend fun BehaviourContext.handleTextWithoutCommands(
     botManager: BotManager
 ) {
     onText { message ->
-        val botCommandList = botManager.commands.value
-            .map { BotCommand(it.command, it.description) }
-        setMyCommands(botCommandList)
-
         if (message.isCommand) return@onText
         println("[TEXT] message: $message")
         processTextInput(

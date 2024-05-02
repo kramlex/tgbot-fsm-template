@@ -64,7 +64,6 @@ data class SendCalculatedMessage(
                         delay(400L)
                     }
                 } catch (error: Throwable) {
-
                     println("${error.message} in ${MessageAction::execute.name}")
                 }
             }

@@ -29,7 +29,7 @@ data class SendDocumentAction(
     override val removeKeyboard: Boolean = false,
     val messageKey: String?,
     val documentKey: String
-) : ExecutableWithProviderAction, EnableKeyboard {
+) : ExecutableAction, EnableKeyboard {
     override suspend fun execute(
         context: BehaviourContext,
         chatId: IdChatIdentifier,

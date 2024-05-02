@@ -11,6 +11,6 @@ import ru.kramlex.tgbot.core.actions.Action
 data class ActionsState(
     override val name: String,
     override val type: StateType,
-    override val actions: List<ru.kramlex.tgbot.core.actions.Action> = emptyList(),
+    override val actions: List<Action> = emptyList(),
     override val afterCommand: String? = null
 ) : StateWithAction

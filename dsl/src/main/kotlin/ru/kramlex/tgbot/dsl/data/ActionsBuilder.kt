@@ -5,6 +5,7 @@
 package ru.kramlex.tgbot.dsl.data
 
 import ru.kramlex.tgbot.core.actions.Action
+import ru.kramlex.tgbot.core.actions.ActionType
 import ru.kramlex.tgbot.core.actions.CustomActions
 import ru.kramlex.tgbot.core.actions.MessageAction
 import ru.kramlex.tgbot.core.actions.RouteAction
@@ -13,7 +14,8 @@ import ru.kramlex.tgbot.core.actions.SendCalculatedMessage
 import ru.kramlex.tgbot.core.actions.SendDocumentAction
 import ru.kramlex.tgbot.core.actions.WarningMessageAction
 import ru.kramlex.tgbot.core.other.ValueType
-import ru.kramlex.tgbot.dsl.utils.emptyLambda
+import ru.kramlex.tgbot.core.states.CallbackButton
+import ru.kramlex.tgbot.core.utils.emptyLambda
 
 @BotDslMarker
 sealed interface DslAction {
@@ -149,19 +151,23 @@ class ActionsBuilder {
     internal fun build(): List<Action> = actions.toList()
 
     private sealed interface ActionBuilder {
-        val type: ru.kramlex.tgbot.core.actions.ActionType
+        val type: ActionType
 
         @BotDslMarker
         var delayAfter: Long?
 
         @BotDslMarker
         var removeKeyboard: Boolean
+
     }
 
     class MessageActionBuilder(
         private val messageKey: String,
     ) : ActionBuilder {
-        override val type: ru.kramlex.tgbot.core.actions.ActionType = ru.kramlex.tgbot.core.actions.ActionType.SEND_MESSAGE
+
+        private var callbackButtons: MutableList<CallbackButton> = mutableListOf()
+
+        override val type: ActionType = ActionType.SEND_MESSAGE
 
         @BotDslMarker
         override var delayAfter: Long? = null
@@ -169,14 +175,17 @@ class ActionsBuilder {
         @BotDslMarker
         override var removeKeyboard: Boolean = false
 
+        fun addCallbackButton(key: String, data: String): Unit =
+            CallbackButton(textKey = key, data = data).let { callbackButtons.add(it) }
+
         internal fun build(): MessageAction =
-            MessageAction(type, delayAfter, removeKeyboard, messageKey)
+            MessageAction(type, delayAfter, removeKeyboard, messageKey, callbacks = callbackButtons)
     }
 
     class WarningMessageActionBuilder(
         private val messageKey: String,
     ) : ActionBuilder {
-        override val type: ru.kramlex.tgbot.core.actions.ActionType = ru.kramlex.tgbot.core.actions.ActionType.SEND_WARNING
+        override val type: ActionType = ActionType.SEND_WARNING
 
         @BotDslMarker
         override var delayAfter: Long? = null
@@ -191,7 +200,7 @@ class ActionsBuilder {
     class SendDocumentActionBuilder(
         private val documentKey: String,
     ) : ActionBuilder {
-        override val type: ru.kramlex.tgbot.core.actions.ActionType = ru.kramlex.tgbot.core.actions.ActionType.SEND_DOCUMENT
+        override val type: ActionType = ActionType.SEND_DOCUMENT
 
         @BotDslMarker
         override var delayAfter: Long? = null
@@ -209,7 +218,7 @@ class ActionsBuilder {
     class RouteActionBuilder(
         private val nextState: String,
     ) : ActionBuilder {
-        override val type: ru.kramlex.tgbot.core.actions.ActionType = ru.kramlex.tgbot.core.actions.ActionType.ROUTE
+        override val type: ActionType = ActionType.ROUTE
 
         @BotDslMarker
         override var delayAfter: Long? = null
@@ -225,7 +234,7 @@ class ActionsBuilder {
         private val key: String,
         private val valueType: ValueType,
     ) : ActionBuilder {
-        override val type: ru.kramlex.tgbot.core.actions.ActionType = ru.kramlex.tgbot.core.actions.ActionType.CUSTOM
+        override val type: ActionType = ActionType.CUSTOM
         private val name: CustomActions = CustomActions.SAVE_OR_UPDATE
 
         @BotDslMarker
@@ -245,7 +254,7 @@ class ActionsBuilder {
         private val infoType: String,
         private val scriptName: String,
     ) : ActionBuilder {
-        override val type: ru.kramlex.tgbot.core.actions.ActionType = ru.kramlex.tgbot.core.actions.ActionType.CUSTOM
+        override val type: ActionType = ActionType.CUSTOM
         private val name: CustomActions = CustomActions.SEND_CALCULATED_TEXT
 
         @BotDslMarker

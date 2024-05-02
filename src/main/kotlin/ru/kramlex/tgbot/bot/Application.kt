@@ -4,8 +4,6 @@
 
 package ru.kramlex.tgbot.bot
 
-import kotlinx.coroutines.runBlocking
-
-fun main() = runBlocking {
+suspend fun main() {
     Bots().start()
 }

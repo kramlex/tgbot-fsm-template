@@ -6,13 +6,13 @@ package ru.kramlex.tgbot.core.actions
 
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.extensions.behaviour_builder.BehaviourContext
-import dev.inmo.tgbotapi.extensions.utils.formatting.buildEntities
 import dev.inmo.tgbotapi.extensions.utils.types.buttons.ReplyKeyboardRowBuilder
 import dev.inmo.tgbotapi.extensions.utils.types.buttons.replyKeyboard
 import dev.inmo.tgbotapi.extensions.utils.types.buttons.simpleButton
 import dev.inmo.tgbotapi.types.IdChatIdentifier
 import dev.inmo.tgbotapi.types.buttons.KeyboardButton
 import dev.inmo.tgbotapi.types.buttons.ReplyKeyboardRemove
+import dev.inmo.tgbotapi.utils.buildEntities
 import dev.inmo.tgbotapi.utils.row
 import kotlinx.serialization.Serializable
 import ru.kramlex.tgbot.core.BotDataProvider
@@ -24,7 +24,7 @@ data class WarningMessageAction(
     override val delayAfter: Long? = null,
     override val removeKeyboard: Boolean = false,
     val messageKey: String
-) : ExecutableWithProviderAction, EnableKeyboard {
+) : ExecutableAction, EnableKeyboard {
 
     @Suppress("DEPRECATION")
     override suspend fun execute(

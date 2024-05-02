@@ -2,10 +2,11 @@
  * Copyright (c) 2022 Mark Dubkov. All rights reserved.
  */
 
-package ru.kramlex.tgbot.bot.utils
+package ru.kramlex.tgbot.core.utils
 
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.IdChatIdentifier
+import dev.inmo.tgbotapi.types.RawChatId
 import dev.inmo.tgbotapi.types.chat.User
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.*
@@ -34,4 +35,4 @@ val CommonMessage<*>.isCommand: Boolean
         return splittedString.size == 1 && splittedString.first().startsWith("/")
     }
 
-val Long.chatId: ChatId get() = ChatId(this)
+val Long.chatId: ChatId get() = ChatId(RawChatId(this))

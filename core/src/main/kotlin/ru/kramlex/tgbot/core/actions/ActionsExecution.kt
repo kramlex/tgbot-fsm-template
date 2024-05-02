@@ -41,14 +41,14 @@ suspend fun BehaviourContext.startActionsQueue(
     actions: List<Action>,
     keyboard: List<MenuElement>? = null
 ) {
-    val newContenxt = createSubContext()
+    val newContext = createSubContext()
     actions.let {
-        if (it.isNotEmpty()) with(newContenxt) {
+        if (it.isNotEmpty()) with(newContext) {
             executeActions(
                 botDataProvider = botDataProvider,
                 chatId = chatId,
-                actions = it, keyboard
-                = keyboard
+                actions = it,
+                keyboard = keyboard
             )
         }
     }
@@ -62,8 +62,7 @@ suspend fun BehaviourContext.executeActionWithMessage(
     keyboard: List<MenuElement>? = null
 ) {
     when (action) {
-        is ExecutableAction -> action.execute(context = this, chatId = chatId, keyboardElements = keyboard)
-        is ExecutableWithProviderAction -> action.execute(
+        is ExecutableAction -> action.execute(
             context = this,
             chatId = chatId,
             botDataProvider = botDataProvider,
@@ -77,7 +76,6 @@ suspend fun BehaviourContext.executeActionWithMessage(
             keyboardElements = null,
             removeKeyBoard = false
         )
-        else -> { /* nothing */ }
     }.apply { action.delayAfter?.let { delay(it) } }
 }
 
@@ -88,8 +86,7 @@ suspend fun BehaviourContext.executeAction(
     keyboard: List<MenuElement>? = null
 ) {
     when (action) {
-        is ExecutableAction -> action.execute(context = this, chatId = chatId, keyboardElements = keyboard)
-        is ExecutableWithProviderAction -> action.execute(
+        is ExecutableAction -> action.execute(
             context = this,
             chatId = chatId,
             botDataProvider = botDataProvider,
@@ -103,7 +100,6 @@ suspend fun BehaviourContext.executeAction(
             keyboardElements = null,
             removeKeyBoard= false
         )
-        else -> { /* nothing */ }
     }.apply { action.delayAfter?.let { delay(it) } }
 }
 
@@ -113,7 +109,6 @@ private suspend fun BehaviourContext.executeActions(
     actions: List<Action>,
     keyboard: List<MenuElement>? = null
 ) {
-
     val lastActionWithKeyboardIndex = actions.indexOfLast { (it as? EnableKeyboard) != null}
     actions.forEachIndexed { index, action ->
         val keyboardElements: List<MenuElement>? =

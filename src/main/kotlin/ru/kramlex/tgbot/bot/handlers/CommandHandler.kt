@@ -11,8 +11,7 @@ import dev.inmo.tgbotapi.utils.PreviewFeature
 import org.slf4j.LoggerFactory
 import ru.kramlex.tgbot.bot.manager.BotManager
 import ru.kramlex.tgbot.bot.model.RepositoryWrapper
-import ru.kramlex.tgbot.bot.utils.chatId
-import ru.kramlex.tgbot.core.actions.SendCalculatedMessage
+import ru.kramlex.tgbot.core.utils.chatId
 
 private const val START_COMMAND = "start"
 private const val DROP_COMMAND = "drop"

@@ -20,7 +20,7 @@ class EnterStateBuilder(
 ) : StateBuilder {
     override val type: StateType = StateType.ENTER
 
-    private var actions: MutableList<ru.kramlex.tgbot.core.actions.Action> = mutableListOf()
+    private var actions: MutableList<Action> = mutableListOf()
     private var keyboard: MutableList<MenuElement>? = null
     private var enterData: EnterData? = null
 
@@ -57,8 +57,8 @@ class EnterStateBuilder(
 }
 
 class EnterDataBuilder {
-    private val afterActions: MutableList<ru.kramlex.tgbot.core.actions.Action> = mutableListOf()
-    private val enterAction: ru.kramlex.tgbot.core.actions.Action? get() = afterEnterAction?.build()
+    private val afterActions: MutableList<Action> = mutableListOf()
+    private val enterAction: Action? get() = afterEnterAction?.build()
 
     private var validation: ValidationData? = null
 

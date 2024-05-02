@@ -8,10 +8,6 @@ import dev.inmo.tgbotapi.types.IdChatIdentifier
 import dev.inmo.tgbotapi.types.message.textsources.TextSourcesList
 import ru.kramlex.tgbot.core.other.ValueType
 
-enum class UserUpdatePhase {
-    PHONE, ORGANIZATION, NAME
-}
-
 interface BotDataProvider {
     fun getStringValue(key: String): String
     fun getStringValueOrNull(key: String): String?

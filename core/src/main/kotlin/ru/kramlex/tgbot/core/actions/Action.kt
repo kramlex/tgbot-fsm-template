@@ -14,7 +14,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import ru.kramlex.tgbot.core.BotDataProvider
 import ru.kramlex.tgbot.core.other.ValueType
+import ru.kramlex.tgbot.core.states.CallbackButton
 import ru.kramlex.tgbot.core.states.MenuElement
 
 @Serializable
@@ -49,16 +51,7 @@ sealed interface ExecutableAction : Action {
     suspend fun execute(
         context: BehaviourContext,
         chatId: IdChatIdentifier,
-        keyboardElements: List<MenuElement>? = null,
-        removeKeyBoard: Boolean = true,
-    )
-}
-
-sealed interface ExecutableWithProviderAction : Action {
-    suspend fun execute(
-        context: BehaviourContext,
-        chatId: IdChatIdentifier,
-        botDataProvider: ru.kramlex.tgbot.core.BotDataProvider,
+        botDataProvider: BotDataProvider,
         keyboardElements: List<MenuElement>? = null,
         removeKeyBoard: Boolean = true,
     )
@@ -69,7 +62,7 @@ sealed interface ExecutableCustomAction : Action {
         context: BehaviourContext,
         chatId: IdChatIdentifier,
         message: CommonMessage<TextContent>?,
-        botDataProvider: ru.kramlex.tgbot.core.BotDataProvider,
+        botDataProvider: BotDataProvider,
         keyboardElements: List<MenuElement>? = null,
         removeKeyBoard: Boolean = true,
     )
@@ -83,13 +76,14 @@ data class ActionSurrogate(
     val messageKey: String? = null,
     val documentKey: String? = null,
 
-    val name: ru.kramlex.tgbot.core.actions.CustomActions? = null,
+    val name: CustomActions? = null,
 
     val infoType: String? = null,
     val key: String? = null,
     val value: String? = null,
     val valueType: ValueType? = null,
     val removeKeyboard: Boolean = true,
+    val callbacks: List<CallbackButton> = emptyList(),
 
     val scriptName: String? = null,
 ) {
@@ -106,7 +100,8 @@ data class ActionSurrogate(
                 type == ActionType.SEND_MESSAGE && !messageKey.isNullOrBlank() -> MessageAction(
                     type = type,
                     delayAfter = delayAfter,
-                    messageKey = messageKey
+                    messageKey = messageKey,
+                    callbacks = callbacks
                 )
 
                 type == ActionType.SEND_WARNING && !messageKey.isNullOrBlank() -> WarningMessageAction(
@@ -162,7 +157,8 @@ data class ActionSurrogate(
                 ActionSurrogate(
                     type = value.type,
                     delayAfter = value.delayAfter,
-                    messageKey = value.messageKey
+                    messageKey = value.messageKey,
+                    callbacks = value.callbacks
                 )
 
             is RouteAction ->

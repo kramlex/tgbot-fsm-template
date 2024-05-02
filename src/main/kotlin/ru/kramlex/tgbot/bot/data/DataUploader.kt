@@ -12,21 +12,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
-import org.jetbrains.kotlin.org.jline.utils.Log
 import ru.kramlex.tgbot.bot.Constants
 import java.io.File
-import java.util.logging.Logger
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 internal class DataUploader {
 
@@ -100,8 +91,8 @@ internal class DataUploader {
         Strings, Urls;
 
         val path: String get() = when (this) {
-            Strings -> Constants.uploadStringsPath
-            Urls -> Constants.uploadUrlsPath
+            Strings -> Constants.UPLOAD_STRINGS_PATH
+            Urls -> Constants.UPLOAD_URLS_PATH
         }
 
         val file: File get() = when (this) {

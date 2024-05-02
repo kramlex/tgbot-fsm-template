@@ -6,6 +6,7 @@ package ru.kramlex.tgbot.dsl.data
 
 import kotlinx.serialization.json.JsonObject
 import ru.kramlex.tgbot.core.data.BotData
+import ru.kramlex.tgbot.core.data.CallbackData
 import ru.kramlex.tgbot.core.data.Command
 import ru.kramlex.tgbot.core.states.State
 import ru.kramlex.tgbot.core.states.jsonObject
@@ -25,10 +26,14 @@ class BotDataBuilder(
     private val startState: String,
     private val defaultState: String
 ) {
+    private val callbacks: MutableList<CallbackData> = mutableListOf()
     private val commands: MutableList<Command> = mutableListOf()
     private val states: MutableList<State> = mutableListOf()
     private val serializedStates: List<JsonObject>
         get() = states.map { it.jsonObject }
+
+    fun addCallbacks(lambda: CallbacksBuilder.() -> Unit): Unit =
+        CallbacksBuilder().apply(lambda).build().let { callbacks.addAll(it) }
 
     @BotDslMarker
     fun addStates(lambda: StatesBuilder.() -> Unit): Unit =
@@ -42,7 +47,7 @@ class BotDataBuilder(
         }
 
     internal fun build(): BotData =
-        BotData(startState, defaultState, serializedStates, commands)
+        BotData(startState, defaultState, callbacks, serializedStates, commands)
 }
 
 class CommandsBuilder {
@@ -57,6 +62,29 @@ class CommandsBuilder {
         addCommand(this, description)
 
     internal fun build(): List<Command> = commands.toList()
+}
+
+class CallbacksBuilder {
+    private val callbacks: MutableList<CallbackData> = mutableListOf()
+
+    @BotDslMarker
+    fun callback(
+        data: String,
+        removeMessage: Boolean = false,
+        lambda: ActionsBuilder.() -> Unit
+    ): Unit = CallbackData(
+        data = data,
+        removeMessage = removeMessage,
+        actions = ActionsBuilder().apply(lambda).build()
+    ).let { callbacks.add(it) }
+
+    @BotDslMarker
+    operator fun String.invoke(
+        removeMessage: Boolean = false,
+        lambda: ActionsBuilder.() -> Unit
+    ) = callback(this, removeMessage, lambda)
+
+    internal fun build(): List<CallbackData> = callbacks.toList()
 }
 
 class StatesBuilder {

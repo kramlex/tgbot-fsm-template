@@ -2,13 +2,11 @@
  * Copyright (c) 2022 Mark Dubkov. All rights reserved.
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     application
-    kotlin("jvm") version "1.7.10"
-    kotlin("plugin.serialization") version "1.7.10"
-    id("app.cash.sqldelight") version "2.0.0-alpha02"
+    kotlin("jvm") version "1.9.21"
+    kotlin("plugin.serialization") version "1.9.21"
+    id("app.cash.sqldelight") version "2.0.2"
 }
 
 application {
@@ -18,12 +16,16 @@ application {
 group = "ru.kramlex"
 version = "1.0.0"
 
+kotlin {
+    jvmToolchain(17)
+}
+
 dependencies {
-    implementation(kotlin("script-runtime"))
-    implementation(kotlin("script-util"))
-    implementation(kotlin("compiler-embeddable"))
-    implementation(kotlin("scripting-compiler-embeddable"))
-    implementation(kotlin("script-util"))
+    implementation(kotlin("script-runtime", version = "1.8.22"))
+    implementation(kotlin("script-util", version = "1.8.22"))
+    implementation(kotlin("compiler-embeddable", version = "1.8.22"))
+    implementation(kotlin("scripting-compiler-embeddable", version = "1.8.22"))
+    implementation(kotlin("script-util", version = "1.8.22"))
 
     implementation(libs.slf4j)
     implementation(libs.coroutines)
@@ -42,15 +44,13 @@ dependencies {
 }
 
 sqldelight {
-    database("BotDatabase") {
-        packageName = "ru.kramlex.db.generated"
-        sourceFolders = listOf("sqldelight")
-        version = 1
+    databases {
+        create("BotDatabase") {
+            packageName.set("ru.kramlex.db.generated")
+            srcDirs("src/main/sqldelight")
+            version = 1
+        }
     }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
 }
 
 tasks["build"].dependsOn("clean")

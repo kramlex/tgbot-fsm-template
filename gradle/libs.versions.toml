@@ -1,23 +1,23 @@
 [versions]
 
-kotlinVersion = "1.7.22"
+kotlinVersion = "1.9.21"
 
-tgBotApiVersion = "5.2.1"
+tgBotApiVersion = "12.0.1"
 
 # kotlinx
-kotlinxSerializationVersion = "1.4.1"
-kotlinxDatetimeVersion = "0.3.3"
-coroutinesVersion = "1.6.4"
-sqlDelightVersion = "2.0.0-alpha02"
+kotlinxSerializationVersion = "1.6.3"
+kotlinxDatetimeVersion = "0.6.0-RC.2"
+coroutinesVersion = "1.8.0"
+sqlDelightVersion = "2.0.2"
 
 # ktor
-ktorClientVersion = "2.0.3"
+ktorClientVersion = "2.3.10"
 
 # csv
-kotlinCsvVersion = "1.4.0"
+kotlinCsvVersion = "1.9.3"
 
 #log
-slf4jVersion = "2.0.6"
+slf4jVersion = "2.0.13"
 
 [libraries]
 
@@ -38,10 +38,6 @@ ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktorClien
 ktorClientCio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClientVersion" }
 
 kotlinCsv = { module = "com.github.doyaaaaaken:kotlin-csv-jvm", version.ref = "kotlinCsvVersion" }
-
-# gradle
-kotlinSerializationGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlinVersion" }
-kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinVersion" }
 
 #ktsRunner
 

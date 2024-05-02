@@ -12,7 +12,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ru.kramlex.tgbot.bot.database.tables.UserDao
-import ru.kramlex.tgbot.bot.utils.fullname
+import ru.kramlex.tgbot.core.utils.fullname
 import ru.kramlex.db.generated.UserRow
 
 class UserRepository(

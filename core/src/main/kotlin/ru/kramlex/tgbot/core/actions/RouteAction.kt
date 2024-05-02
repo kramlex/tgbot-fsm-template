@@ -15,7 +15,7 @@ data class RouteAction(
     override val type: ActionType = ActionType.ROUTE,
     override val delayAfter: Long?,
     val nextState: String,
-) : ExecutableWithProviderAction {
+) : ExecutableAction {
     override suspend fun execute(
         context: BehaviourContext,
         chatId: IdChatIdentifier,
